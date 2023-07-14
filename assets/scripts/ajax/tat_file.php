@@ -41,6 +41,10 @@
     $sheet = $spreadsheet->getActiveSheet();
     $maxrow = $spreadsheet->getActiveSheet()->getHighestRow();
     $maxcol = $spreadsheet->getActiveSheet()->getHighestColumn();
+
+    if(isset($_SESSION['cart_item'])){
+        unset($_SESSION['cart_item']);
+    }
     
     if (!isset($_SESSION['cart_item'])) {
         $_SESSION['cart_item'] = array();
