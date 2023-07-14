@@ -167,7 +167,7 @@
                     }
                 }
             }else{
-                echo 'nor found <br/>';
+                echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'<br>';
             }           
             
             switch($_testcode){

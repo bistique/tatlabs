@@ -1,4 +1,5 @@
-/**
+ <?php
+ /**
  * Created by   : Ary Herijanto
  * Date         : 10th June 2023
  * Company      : ABC Laboratorium Jakarta
@@ -7,8 +8,6 @@
  *                COMPOSER
  *
  **/
- 
-<?php
     session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', TRUE);
