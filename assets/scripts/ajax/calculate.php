@@ -21,6 +21,30 @@
     require_once '../../../lib/config.php';
     require_once '../../../lib/header.php';
 
+    function find_day($dayarray1,$dayreceive1,$daynumber,$max_index){
+        //var_dump($dayarray1).'<br/>';
+        echo $dayreceive1.'---'.$daynumber.'---'.$max_index;
+        if($max_index==0){
+            $i=0;
+            $day_found = $dayarray1[$i];
+        }
+        for($i=0; $i<count($dayarray1);$i++){
+            if($dayarray1[$i]==$dayreceive1){      
+                if($i==$max_index){
+                    $i=0;
+                    $day_found = $dayarray1[$i];
+                    break;
+                }else{
+                    $i++;
+                    $day_found = $dayarray1[$i];
+                    //echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found--->'.$day_found.'<br/>';
+                    break;
+                }
+            }
+        }
+        echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'<br/>';
+    }
+
     function _numberOfDay($name_of_day){
         switch($name_of_day){
             case 'Mon':
@@ -148,34 +172,36 @@
            
             $max_index = count($dayarray)-1;
             echo 'max-index : '.$max_index.'  ';;
-            
+            $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
             if(in_array($dayreceive,$dayarray)){
-                echo '  =day found in array=  ';
-                for($i=0; $i<count($dayarray);$i++){
-                    if($dayarray[$i]==$dayreceive){      
-                        if($i==$max_index){
-                            $i=0;
-                            $day_found = $dayarray[$i];
-                            echo 'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'<br/>';
-                            break;
-                        }else{
-                            $i++;
-                            $day_found = $dayarray[$i];
-                            echo 'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found--->'.$day_found.'<br/>';
-                            break;
-                        }
-                    }
-                }
+               find_day($dayarray,$dayreceive,$day_receive_number,$max_index);
             }else{
-                echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'<br>';
+                $lowcounter = $day_receive_number;
+                $maxcounter = 7;
+                if($max_index==0){
+                    $maxcounter = 0;
+                    $day_found = $dayarray[0];
+                }
+                for($counter = $lowcounter-1;$counter<$maxcounter-1;$counter++){
+                    if($counter==$maxcounter-1){
+                        $lowcounter = 1;
+                        $maxcounter = $day_receive_number-1;
+                    }
+                    if(in_array($listday[$counter],$dayarray)){
+                        $day_found = $listday[$counter];
+                        break;
+                    }
+                    
+                }
+                echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'<br/>';
             }           
             
-            switch($_testcode){
-                case '03272': // IGRA
-                    break;
-                default :
-                    break;
-            }
+            // switch($_testcode){
+            //     case '03272': // IGRA
+            //         break;
+            //     default :
+            //         break;
+            // }
         }
     }else{
         echo 'Data Not Found';
