@@ -182,7 +182,8 @@
                     $maxcounter = 0;
                     $day_found = $dayarray[0];
                 }
-                for($counter = $lowcounter-1;$counter<$maxcounter-1;$counter++){
+                //for editable better using while
+                for($counter = $lowcounter-1;$counter<=$maxcounter-1;$counter++){
                     if($counter==$maxcounter-1){
                         $lowcounter = 1;
                         $maxcounter = $day_receive_number-1;
@@ -190,9 +191,9 @@
                     if(in_array($listday[$counter],$dayarray)){
                         $day_found = $listday[$counter];
                         break;
-                    }
-                    
+                    }    
                 }
+                //=======================================================================
                 echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'<br/>';
             }           
             
