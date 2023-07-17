@@ -23,12 +23,15 @@
 
     function find_day($dayarray1,$dayreceive1,$daynumber,$max_index){
         //var_dump($dayarray1).'<br/>';
+        $daystepcounter = 0;
+
         echo $dayreceive1.'---'.$daynumber.'---'.$max_index;
         if($max_index==0){
             $i=0;
             $day_found = $dayarray1[$i];
         }
         for($i=0; $i<count($dayarray1);$i++){
+            
             if($dayarray1[$i]==$dayreceive1){      
                 if($i==$max_index){
                     $i=0;
@@ -42,7 +45,7 @@
                 }
             }
         }
-        echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'<br/>';
+        echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$daystepcounter.'<br/>';
     }
 
     function _numberOfDay($name_of_day){
@@ -158,51 +161,54 @@
                 $incubate_ = $fetchdata['incubate'];
                 $workday_ = $fetchdata['workday'];
                 $result_ = $fetchdata['result'];
-                
-                //var_dump($dayarray);
-                
-                // echo $code_.'   '.$daymon.' '.$mon_.'  '.$daytue.'-'.$tue_.'<br/>';
             }
+            echo 'Available Schedule : ';
             foreach($dayarray as $dayme){
                 echo $dayme.' ';
             }
-
+            echo '<br/>';
             $dayreceive = date('D',strtotime($item['datereceived']));
             $day_receive_number = _numberOfDay($dayreceive);
            
             $max_index = count($dayarray)-1;
-            echo 'max-index : '.$max_index.'  ';;
+            echo 'day-receive :'.$dayreceive.'  day-number '.$day_receive_number.'max-index : '.$max_index.'<br/>';
             $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
             if(in_array($dayreceive,$dayarray)){
                find_day($dayarray,$dayreceive,$day_receive_number,$max_index);
             }else{
                 $lowcounter = $day_receive_number;
                 $maxcounter = 7;
+                //echo 'low counter : '.$lowcounter.'  max counter'.$maxcounter.'<br/>';
+                
                 if($max_index==0){
                     $maxcounter = 0;
                     $day_found = $dayarray[0];
                 }
-                //for editable better using while
+                
                 for($counter = $lowcounter-1;$counter<=$maxcounter-1;$counter++){
+                    //echo 'looping ---> counter : '.$counter .'----> maxcounter : '.$maxcounter.'<br/>';
                     if($counter==$maxcounter-1){
+                        //echo 'if $ounter == maxcounter : counter is -->'. $counter.'-----'.($maxcounter-1).'<br/>';
                         $lowcounter = 1;
-                        $maxcounter = $day_receive_number-1;
+                        //echo 'new $lowcounter ---> '.$lowcounter.'<br/>';
+                        $maxcounter = $day_receive_number;
+                        //echo 'new $maxcounter ----> '.$maxcounter.'<br/>';
+                        //echo 'listday is : '.$listday[$counter].'<br/>';
+                        for($newcounter=0;$newcounter<$maxcounter;$newcounter++){
+                            //echo 'new counter : '.$newcounter.'<br/>';
+                            //'hari : '.$listday[$newcounter];
+                            if(in_array($listday[$newcounter],$dayarray)){
+                                //echo 'counter is : '.$newcounter.'  here day found : '.$listday[$newcounter];
+                                $day_found = $listday[$newcounter];
+                                break;
+                            }    
+                        }
                     }
-                    if(in_array($listday[$counter],$dayarray)){
-                        $day_found = $listday[$counter];
-                        break;
-                    }    
                 }
                 //=======================================================================
                 echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'<br/>';
             }           
-            
-            // switch($_testcode){
-            //     case '03272': // IGRA
-            //         break;
-            //     default :
-            //         break;
-            // }
+            echo '<br/>';
         }
     }else{
         echo 'Data Not Found';
