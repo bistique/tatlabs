@@ -20,9 +20,12 @@
     require_once '../../../vendor/autoload.php';
     require_once '../../../lib/config.php';
     require_once '../../../lib/header.php';
-
+    $mimopredict='';
+    if(isset($_SESSION['cart_result'])){
+        unset($_SESSION['cart_result']);
+    }
     function updateDate($drv,$dx1){
-        echo $drv;
+        //echo $drv;
         $mod_date = date('d M Y', strtotime("+".$dx1." day", strtotime($drv)));
         return $mod_date;
     }
@@ -31,7 +34,7 @@
         //var_dump($dayarray1).'<br/>';
         $daystepcounter = 0;
 
-        echo $dayreceive1.'---'.$daynumber.'---'.$max_index;
+       // echo $dayreceive1.'---'.$daynumber.'---'.$max_index;
         if($max_index==0){
             $i=0;
             $day_found = $dayarray1[$i];
@@ -53,7 +56,8 @@
         }
         $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
         $datepredict1 = updateDate($daymereceive,$diffdaynumber);
-        echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$diffdaynumber.' date Valid : '.$datepredict1.'<br/>';
+        $mimopredict = $datepredict1;
+        //echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$diffdaynumber.' date Valid : '.$datepredict1.'<br/>';
     }
 
     function findStepDay($dr,$dar,$df,$ldar){
@@ -73,7 +77,6 @@
                 }
             }
         }
-               
         return $ddate-1;
     }
 
@@ -106,13 +109,28 @@
 
     if(isset($_SESSION['cart_item'])){
         $conn2 = mysqli_connect('localhost','bistique','mimo@@##','tatlab');
+        //$itemArray = array('no'=>$no,'accession_no'=>$accession_no,'patient_name'=>$patient_name,'testcode'=>$testcode,'testname'=>$testname,'datereceived'=>$datereceived,'timereceived'=>$timereceived,'datereported'=>$datereported,'timereported'=>$timereported);
+    //     array_push($_SESSION['cart_item'],$itemArray);
+        if (!isset($_SESSION['cart_result'])) {
+            $_SESSION['cart_result'] = array();
+        }
         
         foreach($_SESSION['cart_item'] as $item){
             $dayarray = array();
-            $_testcode=$item['testcode'];
+
+            $_no = $item['no'];
+            $_accessionno = $item['accession_no'];
+            $_patientname = $item['patient_name'];
+            $_testcode = $item['testcode'];
+            $_testname = $item['testname'];
+            $_datereceived = $item['datereceived'];
+            $_timereceived = $item['timereceived'];
+            $_datereported = $item['datereported'];
+            $_timereported = $item['timereported'];
+
             $result = mysqli_query($conn2,"SELECT * from _param WHERE code='$_testcode'");
             $fetchdata = mysqli_fetch_array($result);
-            echo $_testcode. '   ';
+           // echo $_testcode. '   ';
             if($fetchdata){
                 $code_ = $fetchdata['code'];
                 $mon_ = $fetchdata['mon'];
@@ -191,20 +209,22 @@
                 $workday_ = $fetchdata['workday'];
                 $result_ = $fetchdata['result'];
             }
-            echo 'Available Schedule : ';
+           // echo 'Available Schedule : ';
+           $dayme_mimo='';
             foreach($dayarray as $dayme){
-                echo $dayme.' ';
+              $dayme_mimo.=$dayme.' ';
             }
-            echo '<br/>';
+            //echo '<br/>';
             $dreceive = date('m/d/Y',strtotime($item['datereceived']));
             $dayreceive = date('D',strtotime($item['datereceived']));
             $day_receive_number = _numberOfDay($dayreceive);
             $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
             $max_index = count($dayarray)-1;
-            echo 'day-receive :'.$dayreceive.'  day-number '.$day_receive_number.'max-index : '.$max_index.'<br/>';
+            //echo 'day-receive :'.$dayreceive.'  day-number '.$day_receive_number.'max-index : '.$max_index.'<br/>';
             
             if(in_array($dayreceive,$dayarray)){
                find_day($dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive);
+               
             }else{
                 $lowcounter = $day_receive_number;
                 $maxcounter = 7;
@@ -231,13 +251,49 @@
                 }
                 $dx = findStepDay($dayreceive,$dayarray,$day_found,$listday);
                 $dpredict = updateDate($dreceive,$dx);
+                $mimopredict = $dpredict;
                 //=======================================================================
-                echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'dStep : '.$dx.'  date Valid : '.$dpredict.'<br/>';
-            }           
-            echo '<br/>';
+                //echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'dStep : '.$dx.'  date Valid : '.$dpredict.'<br/>';
+            }
+
+            $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$mimopredict,'schedule'=>$dayme_mimo);
+
+            array_push($_SESSION['cart_result'],$itemArrayResult);
+            //echo '<br/>';
         }
     }else{
         echo 'Data Not Found';
+    }
+    echo '<table class="table table-hover table-strip"><small>
+            <thead>
+                <th class="text-center "><small>NO</small></th>
+                <th class="text-center"><small>ACESSION NO</small></th>
+                <th class="text-center"><small>PATIENT NAME</small></th>
+                <th class="text-center"><small>TEST CODE</small></td>
+                <th class="text-center"><small>TEST NAME</small></th>
+                <th class="text-center"><small>DATE RECEIVED</small></th>
+                <th class="text-center"><small>TIME RECEIVED</small></th>
+                <th class="text-center"><small>DATE REPORTED</small></th>
+                <th class="text-center"><small>TIME REPORTED</small></th>
+                <th class="text-center"><small>DATE TAT</small></th>
+                <th class="text-center"><small>SCHEDULE</small></th>
+
+            </thead>';
+    foreach($_SESSION['cart_result'] as $result){
+        echo '<tr>
+                <td class="text-center"><small>'.$result['no'].'</small></td>
+                <td class="text-center"><small>'.$result['accession_no'].'</small></td>
+                <td class="text-right"><small>'.$result['patient_name'].'</small></td>
+                <td class="text-center"><small>'.$result['testcode'].'</small></td>
+                <td class="text-left"><small>'.$result['testname'].'</small></td>
+                <td class="text-center"><small>'.$result['datereceived'].'</small></td>
+                <td class="text-center"><small>'.$result['timereceived'].'</small></td>
+                <td class="text-center"><small>'.$result['datereported'].'</small></td>
+                <td class="text-center"><small>'.$result['timereported'].'</small></td>
+                <td class="text-center bg-primary text-white"><small>'.$result['datepredict'].'</small></td>
+                <td class="text-center bg-info text-white"><small>'.$result['schedule'].'</small></td>
+            </tr>';
+
     }
 
     // use PhpOffice\PhpSpreadsheet\Spreadsheet;
