@@ -21,7 +21,13 @@
     require_once '../../../lib/config.php';
     require_once '../../../lib/header.php';
 
-    function find_day($dayarray1,$dayreceive1,$daynumber,$max_index){
+    function updateDate($drv,$dx1){
+        echo $drv;
+        $mod_date = date('d M Y', strtotime("+".$dx1." day", strtotime($drv)));
+        return $mod_date;
+    }
+
+    function find_day($dayarray1,$dayreceive1,$daynumber,$max_index,$listday1,$daymereceive){
         //var_dump($dayarray1).'<br/>';
         $daystepcounter = 0;
 
@@ -31,11 +37,11 @@
             $day_found = $dayarray1[$i];
         }
         for($i=0; $i<count($dayarray1);$i++){
-            
             if($dayarray1[$i]==$dayreceive1){      
                 if($i==$max_index){
                     $i=0;
                     $day_found = $dayarray1[$i];
+                    
                     break;
                 }else{
                     $i++;
@@ -45,7 +51,30 @@
                 }
             }
         }
-        echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$daystepcounter.'<br/>';
+        $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
+        $datepredict1 = updateDate($daymereceive,$diffdaynumber);
+        echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$diffdaynumber.' date Valid : '.$datepredict1.'<br/>';
+    }
+
+    function findStepDay($dr,$dar,$df,$ldar){
+        $ndr = _numberOfDay($dr);
+        $lod = 7;
+        $ddate = 0;
+        for($counter = $ndr-1;$counter<=$lod-1;$counter++){
+            $ddate++;
+            if($counter==$lod-1){
+                $lowcounter1 = 1;
+                $maxcounter = $ndr;
+                for($newcounter1=0;$newcounter1<$lod;$newcounter1++){
+                    $ddate++;
+                    if(in_array($ldar[$newcounter1],$dar)){
+                        break;
+                    }    
+                }
+            }
+        }
+               
+        return $ddate-1;
     }
 
     function _numberOfDay($name_of_day){
@@ -167,46 +196,43 @@
                 echo $dayme.' ';
             }
             echo '<br/>';
+            $dreceive = date('m/d/Y',strtotime($item['datereceived']));
             $dayreceive = date('D',strtotime($item['datereceived']));
             $day_receive_number = _numberOfDay($dayreceive);
-           
+            $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
             $max_index = count($dayarray)-1;
             echo 'day-receive :'.$dayreceive.'  day-number '.$day_receive_number.'max-index : '.$max_index.'<br/>';
-            $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
+            
             if(in_array($dayreceive,$dayarray)){
-               find_day($dayarray,$dayreceive,$day_receive_number,$max_index);
+               find_day($dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive);
             }else{
                 $lowcounter = $day_receive_number;
                 $maxcounter = 7;
                 //echo 'low counter : '.$lowcounter.'  max counter'.$maxcounter.'<br/>';
-                
+                $ddate1 = 0;
                 if($max_index==0){
                     $maxcounter = 0;
                     $day_found = $dayarray[0];
                 }
                 
                 for($counter = $lowcounter-1;$counter<=$maxcounter-1;$counter++){
-                    //echo 'looping ---> counter : '.$counter .'----> maxcounter : '.$maxcounter.'<br/>';
+                    $ddate1++;
                     if($counter==$maxcounter-1){
-                        //echo 'if $ounter == maxcounter : counter is -->'. $counter.'-----'.($maxcounter-1).'<br/>';
                         $lowcounter = 1;
-                        //echo 'new $lowcounter ---> '.$lowcounter.'<br/>';
                         $maxcounter = $day_receive_number;
-                        //echo 'new $maxcounter ----> '.$maxcounter.'<br/>';
-                        //echo 'listday is : '.$listday[$counter].'<br/>';
                         for($newcounter=0;$newcounter<$maxcounter;$newcounter++){
-                            //echo 'new counter : '.$newcounter.'<br/>';
-                            //'hari : '.$listday[$newcounter];
+                            $ddate1++;
                             if(in_array($listday[$newcounter],$dayarray)){
-                                //echo 'counter is : '.$newcounter.'  here day found : '.$listday[$newcounter];
                                 $day_found = $listday[$newcounter];
                                 break;
                             }    
                         }
                     }
                 }
+                $dx = findStepDay($dayreceive,$dayarray,$day_found,$listday);
+                $dpredict = updateDate($dreceive,$dx);
                 //=======================================================================
-                echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'<br/>';
+                echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'dStep : '.$dx.'  date Valid : '.$dpredict.'<br/>';
             }           
             echo '<br/>';
         }
