@@ -20,7 +20,8 @@
     require_once '../../../vendor/autoload.php';
     require_once '../../../lib/config.php';
     require_once '../../../lib/header.php';
-    $mimopredict='';
+    $mimopredict='testmf';
+
     if(isset($_SESSION['cart_result'])){
         unset($_SESSION['cart_result']);
     }
@@ -55,8 +56,8 @@
             }
         }
         $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
-        $datepredict1 = updateDate($daymereceive,$diffdaynumber);
-        $mimopredict = $datepredict1;
+        $dpredict = updateDate($daymereceive,$diffdaynumber);
+        $mimopredict = $dpredict;
         //echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$diffdaynumber.' date Valid : '.$datepredict1.'<br/>';
     }
 
@@ -114,7 +115,7 @@
         if (!isset($_SESSION['cart_result'])) {
             $_SESSION['cart_result'] = array();
         }
-        
+        $dayme_mimo='';
         foreach($_SESSION['cart_item'] as $item){
             $dayarray = array();
 
@@ -127,10 +128,11 @@
             $_timereceived = $item['timereceived'];
             $_datereported = $item['datereported'];
             $_timereported = $item['timereported'];
+            $dpredict = $item['datereported'];
 
             $result = mysqli_query($conn2,"SELECT * from _param WHERE code='$_testcode'");
             $fetchdata = mysqli_fetch_array($result);
-           // echo $_testcode. '   ';
+        // echo $_testcode. '   ';
             if($fetchdata){
                 $code_ = $fetchdata['code'];
                 $mon_ = $fetchdata['mon'];
@@ -209,54 +211,15 @@
                 $workday_ = $fetchdata['workday'];
                 $result_ = $fetchdata['result'];
             }
-           // echo 'Available Schedule : ';
-           $dayme_mimo='';
+            $dayme_mimo='';
             foreach($dayarray as $dayme){
-              $dayme_mimo.=$dayme.' ';
+                      $dayme_mimo.=$dayme.' ';
             }
-            //echo '<br/>';
-            $dreceive = date('m/d/Y',strtotime($item['datereceived']));
-            $dayreceive = date('D',strtotime($item['datereceived']));
-            $day_receive_number = _numberOfDay($dayreceive);
-            $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
-            $max_index = count($dayarray)-1;
-            //echo 'day-receive :'.$dayreceive.'  day-number '.$day_receive_number.'max-index : '.$max_index.'<br/>';
             
-            if(in_array($dayreceive,$dayarray)){
-               find_day($dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive);
-               
-            }else{
-                $lowcounter = $day_receive_number;
-                $maxcounter = 7;
-                //echo 'low counter : '.$lowcounter.'  max counter'.$maxcounter.'<br/>';
-                $ddate1 = 0;
-                if($max_index==0){
-                    $maxcounter = 0;
-                    $day_found = $dayarray[0];
-                }
-                
-                for($counter = $lowcounter-1;$counter<=$maxcounter-1;$counter++){
-                    $ddate1++;
-                    if($counter==$maxcounter-1){
-                        $lowcounter = 1;
-                        $maxcounter = $day_receive_number;
-                        for($newcounter=0;$newcounter<$maxcounter;$newcounter++){
-                            $ddate1++;
-                            if(in_array($listday[$newcounter],$dayarray)){
-                                $day_found = $listday[$newcounter];
-                                break;
-                            }    
-                        }
-                    }
-                }
-                $dx = findStepDay($dayreceive,$dayarray,$day_found,$listday);
-                $dpredict = updateDate($dreceive,$dx);
-                $mimopredict = $dpredict;
-                //=======================================================================
-                //echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'dStep : '.$dx.'  date Valid : '.$dpredict.'<br/>';
-            }
 
-            $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$mimopredict,'schedule'=>$dayme_mimo);
+        //    
+
+            $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$dpredict,'schedule'=>$dayme_mimo);
 
             array_push($_SESSION['cart_result'],$itemArrayResult);
             //echo '<br/>';
@@ -264,7 +227,7 @@
     }else{
         echo 'Data Not Found';
     }
-    echo '<table class="table table-hover table-strip"><small>
+    $tatcalculate =  '<table class="table table-hover table-strip"><small>
             <thead>
                 <th class="text-center "><small>NO</small></th>
                 <th class="text-center"><small>ACESSION NO</small></th>
@@ -280,7 +243,7 @@
 
             </thead>';
     foreach($_SESSION['cart_result'] as $result){
-        echo '<tr>
+        $tatcalculate.='<tr>
                 <td class="text-center"><small>'.$result['no'].'</small></td>
                 <td class="text-center"><small>'.$result['accession_no'].'</small></td>
                 <td class="text-right"><small>'.$result['patient_name'].'</small></td>
@@ -295,6 +258,7 @@
             </tr>';
 
     }
+    echo $tatcalculate;
 
     // use PhpOffice\PhpSpreadsheet\Spreadsheet;
     // use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
@@ -416,4 +380,134 @@
     // }
     // $import.= '</small></table>';
     // echo $import;
+
+
+    //$result = mysqli_query($conn2,"SELECT * from _param WHERE code='$_testcode'");
+    //     $fetchdata = mysqli_fetch_array($result);
+    //    // echo $_testcode. '   ';
+    //     if($fetchdata){
+    //         $code_ = $fetchdata['code'];
+    //         $mon_ = $fetchdata['mon'];
+    //         $daymon = '';
+    //         $numberofday=0;
+    //         if($mon_!=0){
+    //             $daymon ="Mon";
+    //             $numberofday=1;
+    //             array_push($dayarray,$daymon);
+    //         }else{
+    //             $daymon=0;
+    //             $numberofday=1;
+    //         }
+
+    //         $tue_ = $fetchdata['tue'];
+    //         if($tue_!=0){
+    //             $daytue ="Tue";
+    //             $numberofday=2;
+    //             array_push($dayarray,$daytue);
+    //         }else{
+    //             $daytue=0;
+    //             $numberofday=2;
+    //         }
+
+    //         $wed_ = $fetchdata['wed'];
+    //         if($wed_!=0){
+    //             $daywed ="Wed";
+    //             $numberofday=3;
+    //             array_push($dayarray,$daywed);
+    //         }else{
+    //             $daywed=0;
+    //             $numberofday=3;
+    //         }
+
+    //         $thu_ = $fetchdata['thu'];
+    //         if($thu_!=0){
+    //             $daythu ="Thu";
+    //             $numberofday=4;
+    //             array_push($dayarray,$daythu);
+    //         }else{
+    //             $daythu=0;
+    //             $numberofday=4;
+    //         }
+
+    //         $fri_ = $fetchdata['fri'];
+    //         if($fri_!=0){
+    //             $dayfri ="Fri";
+    //             $numberofday=5;
+    //             array_push($dayarray,$dayfri);
+    //         }else{
+    //             $dayfri=0;
+    //             $numberofday=5;
+    //         }
+
+    //         $sat_ = $fetchdata['sat'];
+    //         if($sat_!=0){
+    //             $daysat ="Sat";
+    //             $numberofday=6;
+    //             array_push($dayarray,$daysat);
+    //         }else{
+    //             $daysat=0;
+    //             $numberofday=6;
+    //         }
+
+    //         $sun_ = $fetchdata['sun'];
+    //         if($sun_!=0){
+    //             $daysun ="Sun";
+    //             $numberofday=7;
+    //             array_push($dayarray,$daysun);
+    //         }else{
+    //             $daysun=0;
+    //             $numberofday=7;
+    //         }
+
+    //         $incubate_ = $fetchdata['incubate'];
+    //         $workday_ = $fetchdata['workday'];
+    //         $result_ = $fetchdata['result'];
+    //     }
+    //    // echo 'Available Schedule : ';
+    //    $dayme_mimo='';
+    //     foreach($dayarray as $dayme){
+    //       $dayme_mimo.=$dayme.' ';
+    //     }
+    //     //echo '<br/>';
+    //     $dreceive = date('m/d/Y',strtotime($item['datereceived']));
+    //     $dayreceive = date('D',strtotime($item['datereceived']));
+    //     $day_receive_number = _numberOfDay($dayreceive);
+    //     $listday = array('Mon','Tue','Wed','Thu','Fri','Sat','Sun');
+    //     $max_index = count($dayarray)-1;
+    //     //echo 'day-receive :'.$dayreceive.'  day-number '.$day_receive_number.'max-index : '.$max_index.'<br/>';
+        
+    //     if(in_array($dayreceive,$dayarray)){
+            
+    //        find_day($dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive);
+           
+    //     }else{
+    //         $lowcounter = $day_receive_number;
+    //         $maxcounter = 7;
+    //         //echo 'low counter : '.$lowcounter.'  max counter'.$maxcounter.'<br/>';
+    //         $ddate1 = 0;
+    //         if($max_index==0){
+    //             $maxcounter = 0;
+    //             $day_found = $dayarray[0];
+    //         }
+            
+    //         for($counter = $lowcounter-1;$counter<=$maxcounter-1;$counter++){
+    //             $ddate1++;
+    //             if($counter==$maxcounter-1){
+    //                 $lowcounter = 1;
+    //                 $maxcounter = $day_receive_number;
+    //                 for($newcounter=0;$newcounter<$maxcounter;$newcounter++){
+    //                     $ddate1++;
+    //                     if(in_array($listday[$newcounter],$dayarray)){
+    //                         $day_found = $listday[$newcounter];
+    //                         break;
+    //                     }    
+    //                 }
+    //             }
+    //         }
+    //         $dx = findStepDay($dayreceive,$dayarray,$day_found,$listday);
+    //         $dpredict = updateDate($dreceive,$dx);
+    //         $mimopredict = $dpredict;
+    //         //=======================================================================
+    //         //echo '  not found -->'.'day receive number-->'.$day_receive_number.'  '.'  day received -->'.$dayreceive.'   day found-->'.$day_found.'dStep : '.$dx.'  date Valid : '.$dpredict.'<br/>';
+    //     }
 ?>

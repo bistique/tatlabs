@@ -40,6 +40,7 @@
     $sheet = $spreadsheet->getActiveSheet();
     $maxrow = $spreadsheet->getActiveSheet()->getHighestRow();
     $maxcol = $spreadsheet->getActiveSheet()->getHighestColumn();
+    echo $maxrow;
 
     if(isset($_SESSION['cart_item'])){
         unset($_SESSION['cart_item']);
@@ -50,7 +51,7 @@
     }
 	
     $ColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($maxcol);
-    for ($row = 5; $row <= $maxrow-3; ++ $row) {
+    for ($row = 5; $row <= $maxrow-7; ++ $row) {
         $val = array();
        
         for ($col = 1; $col < $ColumnIndex; ++ $col) {
