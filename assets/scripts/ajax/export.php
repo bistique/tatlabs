@@ -1,4 +1,13 @@
 <?php
+/**
+ * Created by   : Ary Herijanto
+ * Date         : 10th July 2023
+ * Company      : ABC Laboratorium Jakarta
+ * Libs         : PHPOFFICE/PHPSPREADSHEET
+ *                PHPMAILER  
+ *                COMPOSER
+ *
+ **/
     session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', TRUE);
@@ -30,6 +39,8 @@
     $sheet->getStyle("A2")->getFont()->setBold(true);
     $sheet->getStyle('A1')->getAlignment()->setHorizontal('left');
     $sheet->getStyle('A2')->getAlignment()->setHorizontal('left');
+    $sheet->mergeCells('A1:B1');
+    $sheet->mergeCells('A2:B2');
     $sheet->setCellValue('A1',$header1);
     $sheet->setCellValue('A2',$header2);
     $sheet->getStyle('A:B')->getAlignment()->setHorizontal('center');

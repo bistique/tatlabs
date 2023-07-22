@@ -1,7 +1,7 @@
  <?php
  /**
  * Created by   : Ary Herijanto
- * Date         : 10th June 2023
+ * Date         : 10th July 2023
  * Company      : ABC Laboratorium Jakarta
  * Libs         : PHPOFFICE/PHPSPREADSHEET
  *                PHPMAILER  
@@ -113,14 +113,16 @@
                 <th class="text-center"><medium>TIME RECEIVED</medium></th>
                 <th class="text-center"><medium>DATE REPORTED</medium></th>
                 <th class="text-center"><medium>TIME REPORTED</medium></th>
-            </thead>';
+                <th class="text-center"><medium>TAT</medium></th> 
+
+            </thead>';// ambil di kolom master
         
     $conn2 = mysqli_connect('localhost','bistique','mimo@@##','tatlab');
     foreach($_SESSION['cart_item'] as $item){
         $import.='<tr>
                 <td class="text-center"><medium>'.$item['no'].'</medium></td>
                 <td class="text-center"><medium>'.$item['accession_no'].'</medium></td>
-                <td class="text-right"><medium>'.$item['patient_name'].'</medium></td>
+                <td class="text-left"><medium>'.$item['patient_name'].'</medium></td>
                 <td class="text-center"><medium>'.$item['testcode'].'</medium></td>
                 <td class="text-left"><medium>'.$item['testname'].'</medium></td>
                 <td class="text-center"><medium>'.$item['datereceived'].'</medium></td>
