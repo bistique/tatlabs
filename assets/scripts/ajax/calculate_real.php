@@ -21,7 +21,7 @@
     require_once '../../../lib/config.php';
     require_once '../../../lib/header.php';
     $mimopredict='testmf';
-
+    
     if(isset($_SESSION['cart_result'])){
         unset($_SESSION['cart_result']);
     }
@@ -119,7 +119,7 @@
             }
         }
         //
-        return $day_found.'   '.$dpredict;
+        return $dpredict;
         //echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$diffdaynumber.' date Valid : '.$datepredict1.'<br/>';
     }
 
@@ -306,9 +306,10 @@
             
             if(in_array($dayreceive,array_column($dayarray,'day'))){//in_array($dayreceive,$dayarray)){
              
-             $sp = find_day($_no,$code_,$dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive,$_timereceived);
-             echo $code_.'---> '.$dayreceive.'---> '.$sp.'<br/>';
+                $sp = find_day($_no,$code_,$dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive,$_timereceived);
+                echo $code_.'---> '.$dayreceive.'---> '.$sp.'<br/>';
             }else{
+                $sp='no data';
                 // $lowcounter = $day_receive_number;
                 // $maxcounter = 7;
                 // //echo 'low counter : '.$lowcounter.'  max counter'.$maxcounter.'<br/>';
@@ -340,9 +341,9 @@
             }
             
             
-        //    $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$dpredict,'schedule'=>$dayme_mimo);
+           $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$sp,'schedule'=>$dayme_mimo);
 
-        //     array_push($_SESSION['cart_result'],$itemArrayResult);
+            array_push($_SESSION['cart_result'],$itemArrayResult);
         //     //echo '<br/>';
          }
     }else{
