@@ -38,7 +38,7 @@
         // listday -> 'Mon','Tue','Wed','Thu','Fri','Sat','Sun'
         // daymreceive -> date of sample receive eg. '06/02/2023'
 
-    function find_day($dayarray1,$dayreceive1,$daynumber,$max_index,$listday1,$daymereceive,$mtimereceive){
+    function find_day($no__,$code__,$dayarray1,$dayreceive1,$daynumber,$max_index,$listday1,$daymereceive,$mtimereceive){
         
         $daystepcounter = 0;
 
@@ -47,9 +47,10 @@
             $i=0;
             $day_found = $dayarray1[$i]['day'];
         }
-
+        echo $no__.' -- '.$code__.' ==== ';
         for($i=0;$i<count($dayarray1);$i++){
             if($dayarray1[$i]['day']==$dayreceive1){
+                echo '$i is : '.$i.'>>>>';
                 if(substr($dayarray1[$i]['time'],0,1)=='<'){
                     $time_rec_extract =  substr($dayarray1[$i]['time'],1,strlen($dayarray1[$i]['time'])-1).'  ';
                     if ($mtimereceive < $time_rec_extract){
@@ -60,15 +61,23 @@
                         break; 
                     }
                     if ($mtimereceive > $time_rec_extract){
-                            $i++;
-                            $day_found = $dayarray1[$i]['day'];
-                            $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
-                            $dpredict = updateDate($daymereceive,$diffdaynumber);
-                            break;
+                            echo 'tanda < LEBIH BESAR';
+                            if($i==$max_index){
+                                $i=0;
+                                $day_found = $dayarray1[$i]['day'];
+                                $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
+                                $dpredict = updateDate($daymereceive,$diffdaynumber);
+                                break;
+                            }else{
+                                $i++;
+                                $day_found = $dayarray1[$i]['day'];
+                                $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
+                                $dpredict = updateDate($daymereceive,$diffdaynumber);
+                            }
                     }
                 }else{
                     if($mtimereceive > $dayarray1[$i]['time']){
-                        echo 'lebih besar dan in array......terima : '.$mtimereceive.' jadwal : '.$dayarray1[$i]['day'].' - '.$dayarray1[$i]['time'].'  ';
+                        echo 'bukan tanda < DAN LEBIH BESAR dan in array......terima : '.$mtimereceive.' jadwal : '.$dayarray1[$i]['day'].' - '.$dayarray1[$i]['time'].'  ';
                         // echo 'time receive is : '.$mtimereceive.' greater than '.$dayarray1[$i]['time'].'  ';
                         if($i==$max_index){
                                 $i=0;
@@ -297,7 +306,7 @@
             
             if(in_array($dayreceive,array_column($dayarray,'day'))){//in_array($dayreceive,$dayarray)){
              
-             $sp = find_day($dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive,$_timereceived);
+             $sp = find_day($_no,$code_,$dayarray,$dayreceive,$day_receive_number,$max_index,$listday,$dreceive,$_timereceived);
              echo $code_.'---> '.$dayreceive.'---> '.$sp.'<br/>';
             }else{
                 // $lowcounter = $day_receive_number;
