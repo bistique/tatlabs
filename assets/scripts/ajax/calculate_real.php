@@ -31,14 +31,15 @@
         return $mod_date;
     }
 
-    function find_day($dayarray1,$dayreceive1,$daynumber,$max_index,$listday1,$daymereceive,$mtimereceive){
-        // dayarray1 -> schedule day per test code got from table params
+    // dayarray1 -> schedule day per test code got from table params
         // dayreceive1 -> name of the day sample received
         // daynumber -> a number in week of the day receive
         // max_index -> maximum count of index of dayarray1
         // listday -> 'Mon','Tue','Wed','Thu','Fri','Sat','Sun'
         // daymreceive -> date of sample receive eg. '06/02/2023'
 
+    function find_day($dayarray1,$dayreceive1,$daynumber,$max_index,$listday1,$daymereceive,$mtimereceive){
+        
         $daystepcounter = 0;
 
        // echo $dayreceive1.'---'.$daynumber.'---'.$max_index;
@@ -47,17 +48,24 @@
             $day_found = $dayarray1[$i]['day'];
         }
 
-        for($i=0; $i<count($dayarray1);$i++){
+        for($i=0;$i<count($dayarray1);$i++){
             if($dayarray1[$i]['day']==$dayreceive1){
                 if(substr($dayarray1[$i]['time'],0,1)=='<'){
                     $time_rec_extract =  substr($dayarray1[$i]['time'],1,strlen($dayarray1[$i]['time'])-1).'  ';
                     if ($mtimereceive < $time_rec_extract){
-                        echo 'time receive is : '.$mtimereceive.' less than '.$time_rec_extract.'  ';
+                        echo 'tanda < time receive is : '.$mtimereceive.' less than '.$time_rec_extract.'  ';
                         //do today
                         $day_found = $dayarray1[$i]['day'];
-                        $dpredict=date('d M Y',strtotime($daymereceive)); 
+                        $dpredict=date('d M Y',strtotime($daymereceive));
+                        break; 
                     }
-
+                    if ($mtimereceive > $time_rec_extract){
+                            $i++;
+                            $day_found = $dayarray1[$i]['day'];
+                            $diffdaynumber = findStepDay($dayreceive1,$dayarray1,$day_found,$listday1);
+                            $dpredict = updateDate($daymereceive,$diffdaynumber);
+                            break;
+                    }
                 }else{
                     if($mtimereceive > $dayarray1[$i]['time']){
                         echo 'lebih besar dan in array......terima : '.$mtimereceive.' jadwal : '.$dayarray1[$i]['day'].' - '.$dayarray1[$i]['time'].'  ';
@@ -77,10 +85,7 @@
                                 //echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found--->'.$day_found.'<br/>';
                                 echo '  hari ketemu : '.$day_found.' selisih hari : '.$diffdaynumber.'    ';
                                 break;
-                        }
-                        
-                        
-                        //do next day
+                        }      //do next day
                     }
                     if($mtimereceive < $dayarray1[$i]['time']){
                         echo 'time receive is : '.$mtimereceive.' less than '.$dayarray1[$i]['time'].'  ';
@@ -105,8 +110,6 @@
             }
         }
         //
-       
-      
         return $day_found.'   '.$dpredict;
         //echo 'day receive number-->'.$daynumber.'  '.'  day received -->'.$dayreceive1.'   day found-->'.$day_found.'  dSTEP : '.$diffdaynumber.' date Valid : '.$datepredict1.'<br/>';
     }
