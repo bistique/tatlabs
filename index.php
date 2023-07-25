@@ -1,29 +1,34 @@
 <?php
-require_once './lib/config.php';
-require_once './lib/header.php';
+    require_once './lib/config.php';
+    require_once './lib/header.php';
 ?>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="./css/login.css" />
     </head>
-    <body>
-        <div id="divimage" class="mt-3 ml-3">
-            <img src="logo.png" width="100px" height="40px">
-        </div>
-        <div class="card-deck mt-5" style="margin-left:20%;margin-right:20%;">
-            <div id="param" class="card">
-                <div class="card-body bg-warning">
-            
-                <h5 class="card-text" style="font-size:30px;">Parameter Database</h5>
-                <p class="card-text"><small class="text-muted">Tools to update paramater data</small></p>
+        <body>
+        <div class="login-box">
+            <h2>Login</h2>
+            <form>
+                <div class="user-box">
+                    <input type="text" name="username" id="username" required="Type username">
+                    <label>Username</label>
                 </div>
-            </div>
-            <div id="tat" class="card bg-primary ">
-                <div class="card-body">
-                <h5 class="card-text text-white" style="font-size:30px;">T A T</h5>
-                <p class="card-text text-white"><small>Process TAT</small></p>
-            </div>
+                <div class="user-box">
+                    <input type="password" name="pwd" id="pwd" required="Input password">
+                    <label>Password</label>
+                </div>
+               
+                <a href="" id="submit">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Submit
+                </a>
+            </form>
         </div>
     </body>
-    <script src="./assets/scripts/js/mimo.js"></script>
+    <script src="./assets/scripts/js/lasagna.js"></script>
 </html>

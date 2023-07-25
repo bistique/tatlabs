@@ -7,7 +7,7 @@
  *                PHPMAILER  
  *                COMPOSER
  *
- ********************************************/
+ **/
     session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', TRUE);
@@ -24,9 +24,9 @@
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-    $header1 = //$_POST['header1'];
-    $header2 = //$_POST['header2'];
-    $filename1 = 'testfile3';//$_POST['filename'];
+    // $header1 = $_POST['header1'];
+    // $header2 = $_POST['header2'];
+    // $filename1 = $_POST['filename'];
     
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -62,16 +62,10 @@
     $sheet->setCellValueByColumnAndRow(11,4,'SCHEDULE');
     $sheet->setCellValueByColumnAndRow(12,4,'RESULT');
     $sheet->setCellValueByColumnAndRow(13,4,'VALIDITY');
-    $total_patient=0;
-    $state_no=0;
+
     for($row=0;$row<count($_SESSION['cart_result']);$row++){
             $sheet->setCellValueByColumnAndRow(1,$row+5, $_SESSION['cart_result'][$row]['no']);
             $sheet->setCellValueByColumnAndRow(2,$row+5, $_SESSION['cart_result'][$row]['accession_no']);
-            if($_SESSION['cart_result'][$row]['accession_no'] == ' '){
-                
-            }else{
-                $total_patient++;
-            }
             $sheet->setCellValueByColumnAndRow(3,$row+5, $_SESSION['cart_result'][$row]['patient_name']);
             $sheet->setCellValueByColumnAndRow(4,$row+5, $_SESSION['cart_result'][$row]['testcode']);
             $sheet->setCellValueByColumnAndRow(5,$row+5, $_SESSION['cart_result'][$row]['testname']);
@@ -82,34 +76,33 @@
             $sheet->setCellValueByColumnAndRow(10,$row+5, $_SESSION['cart_result'][$row]['datepredict']);
             $sheet->setCellValueByColumnAndRow(11,$row+5, $_SESSION['cart_result'][$row]['schedule']);
             // $sheet->setCellValueByColumnAndRow(12,$row+5, $_SESSION['cart_result'][$row]['result']);
-            $datereported = date('Y-m-d',strtotime($_SESSION['cart_result'][$row]['datereported']));
-            $datepredict = date('Y-m-d',strtotime($_SESSION['cart_result'][$row]['datepredict']));
-           
-            if($datereported <= $datepredict){
+            $datereported = strtotime($_SESSION['cart_result'][$row]['datereported']);
+            $datepredict = strtotime($_SESSION['cart_result'][$row]['datepredict']);
+            echo $_SESSION['cart_result'][$row]['no'];
+            var_dump($datepredict);
+            var_dump($datereported);
+            //var_dump(date_create(date('Y-m-d',strtotime($datepredict))));
+            //$datevalid = $datepredict-$datereported;
+            // if($datevalid==0){
+            //     $datevalid='Yes';
+            // }else{
+            //     $datevalid="No";
+            // }
+            if(date_create($datereported) <= date_create($datepredict)){
                 $datevalid='Yes';
             }else{
                 $datevalid='No';
-                $state_no++;
             }
+           
+            echo $datevalid;
             $sheet->setCellValueByColumnAndRow(12,$row+5, $_SESSION['cart_result'][$row]['result']);
             $sheet->setCellValueByColumnAndRow(13,$row+5, $datevalid);
     }
-    $maxrow = $sheet->getHighestRow();
-    $sheet->setCellValue("A".$maxrow+1, "TOTAL PATIENT :");
-    $sheet->setCellValue("D".$maxrow+1, $total_patient);
-    $sheet->setCellValue("A".$maxrow+2, "WHSP MELEBIHI TAT : ");
-    $sheet->setCellValue("D".$maxrow+2, $state_no);
-    $sheet->setCellValue("A".$maxrow+3, "% PENCAPAIAN TAT : ");
-    $rowstate = "D".$maxrow+2;
-    $rowtotal = "D".$maxrow+1;
-    $sheet->setCellValue("D".$maxrow+3,"=(100-((".$rowstate."/".$rowtotal.")*100))");
-    
-    
-    $writer = new Xlsx($spreadsheet);
-    $writer->save('../../../results/'.$filename1.'.xlsx');
-    if($writer){
-        echo 'true';
-    }else{
-        echo 'false';
-    }
+    // $writer = new Xlsx($spreadsheet);
+    // $writer->save('../../../results/'.$filename1.'.xlsx');
+    // if($writer){
+    //     echo 'true';
+    // }else{
+    //     echo 'false';
+    // }
 ?>

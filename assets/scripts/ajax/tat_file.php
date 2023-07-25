@@ -61,6 +61,17 @@
             }else{
                 $value=$cell->getValue();
             }
+
+            // if($cell=='TOTAL PASIEN :'){
+            //     break;
+            // }
+            // if($cell=='WSHP melebihi TAT :'){
+            //     break;
+            // }
+            // if($cell=='% PENCAPAIAN TAT'){
+            //     break;
+            // }
+
             switch($col){
                 case 1:
                     $no = $value;
@@ -113,7 +124,7 @@
                 <th class="text-center"><medium>TIME RECEIVED</medium></th>
                 <th class="text-center"><medium>DATE REPORTED</medium></th>
                 <th class="text-center"><medium>TIME REPORTED</medium></th>
-                <th class="text-center"><medium>TAT</medium></th> 
+                 
 
             </thead>';// ambil di kolom master
         

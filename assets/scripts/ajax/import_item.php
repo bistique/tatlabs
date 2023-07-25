@@ -9,7 +9,6 @@
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-
     $results = [];
     $reader = new Xlsx(); //   PhpOffice\PhpSpreadsheet\Reader\Xlsx
     $reader->setReadDataOnly(true);
@@ -18,15 +17,12 @@
     $maxrow = $spreadsheet->getActiveSheet()->getHighestRow();
     $maxcol = $spreadsheet->getActiveSheet()->getHighestColumn();
     
-    
     if (!isset($_SESSION['cart_item'])) {
         $_SESSION['cart_item'] = array();
     }
 
-    echo MYROOT;
-	
     $ColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($maxcol);
-    for ($row = 4; $row <= $maxrow-4; ++ $row) {
+    for ($row = 4; $row <= $maxrow; ++ $row) {
         $val = array();
         $col = 1;
         for ($col = 2; $col < $ColumnIndex; ++ $col) {
@@ -127,8 +123,13 @@
             $incubate_ = $item['incubate'];
             $result_ = $item['result'];
 
-           $result = mysqli_query($conn2,"insert into _param (code, param,mon,tue,wed,thu,fri,sat,sun,workday,incubate,result) values ('$code_', '$param_','$mon_', '$tue_','$wed_','$thu_','$fri_','$sat_','$sun_','$workday_','$incubate_','$result_');");
+            $selectexist = mysqli_query($conn2,"SELECT code FROM _param WHERE code='$code_';");
+            $row_count = mysqli_num_rows($selectexist);
+            if($row_count>0){
 
+            }else{
+                $result = mysqli_query($conn2,"insert into _param (code, param,mon,tue,wed,thu,fri,sat,sun,workday,incubate,result) values ('$code_', '$param_','$mon_', '$tue_','$wed_','$thu_','$fri_','$sat_','$sun_','$workday_','$incubate_','$result_');");
+            }
     }
     echo '</table>';
 ?>

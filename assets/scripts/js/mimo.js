@@ -56,7 +56,7 @@ $(document).ready(function () {
     $('#btncalculate').click(function(e){
         $.ajax({
             type: "POST",
-            url: "./assets/scripts/ajax/calculate.php",
+            url: "./assets/scripts/ajax/calculate_real.php",
             data:'',
             success: function(mimoresponse){
                 $('#importresult').html('');
