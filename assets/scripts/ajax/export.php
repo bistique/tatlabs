@@ -67,10 +67,25 @@
     for($row=0;$row<count($_SESSION['cart_result']);$row++){
             $sheet->setCellValueByColumnAndRow(1,$row+5, $_SESSION['cart_result'][$row]['no']);
             $sheet->setCellValueByColumnAndRow(2,$row+5, $_SESSION['cart_result'][$row]['accession_no']);
-            if($_SESSION['cart_result'][$row]['accession_no'] == ' '){
-                
+
+            $mf = $sheet->setCellValueByColumnAndRow(2,$row+5, $_SESSION['cart_result'][$row]['accession_no']);
+            if($mf == ' '){
+                $dataexist = 'empty';
             }else{
+                $dataexist = 'exist';
+                $namapasien = $mf;
                 $total_patient++;
+            }
+
+            switch ($dataexist) {
+                case 'empty':
+                    # code...
+                    break;
+                case 'exist':
+                    break;
+                default:
+                    # code...
+                    break;
             }
             $sheet->setCellValueByColumnAndRow(3,$row+5, $_SESSION['cart_result'][$row]['patient_name']);
             $sheet->setCellValueByColumnAndRow(4,$row+5, $_SESSION['cart_result'][$row]['testcode']);
@@ -103,7 +118,6 @@
     $rowstate = "D".$maxrow+2;
     $rowtotal = "D".$maxrow+1;
     $sheet->setCellValue("D".$maxrow+3,"=(100-((".$rowstate."/".$rowtotal.")*100))");
-    
     
     $writer = new Xlsx($spreadsheet);
     $writer->save('../../../results/'.$filename1.'.xlsx');
