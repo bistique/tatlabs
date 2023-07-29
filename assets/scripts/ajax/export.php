@@ -23,28 +23,43 @@
 
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    use PhpOffice\PhpSpreadsheet\Style;
 
-    $header1 = //$_POST['header1'];
-    $header2 = //$_POST['header2'];
-    $filename1 = 'testfile3';//$_POST['filename'];
+    $header1 = $_POST['header1'];
+    $header2 = $_POST['header2'];
+    $filename1 = $_POST['filename'];
     
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
+
+    $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+    $drawing->setName('ABC Laboratorium');
+    $drawing->setDescription('Company Logo');
+    $drawing->setPath('../../../logo.png'); /* put your path and image here */
+    $drawing->setCoordinates('A1');
+    $drawing->setWidthAndHeight(148,74);
+    $drawing->setResizeProportional(true);
+    //$drawing->setOffsetX(110);
+    $drawing->setRotation(0);
+    $drawing->getShadow()->setVisible(true);
+    $drawing->getShadow()->setDirection(45);
+    $drawing->setWorksheet($spreadsheet->getActiveSheet());
+
     
-    foreach(range('A','L') as $columnID) {
+    foreach(range('B','L') as $columnID) {
         $sheet->getColumnDimension($columnID)
             ->setAutoSize(true);
     }
-    $sheet->getStyle("A1")->getFont()->setBold(true);
-    $sheet->getStyle("A2")->getFont()->setBold(true);
+    $sheet->getStyle("B1")->getFont()->setBold(true);
+    $sheet->getStyle("B2")->getFont()->setBold(true);
     
-    $sheet->mergeCells('A1:B1');
-    $sheet->mergeCells('A2:B2');
-    $sheet->getStyle('A1:B1')->getAlignment()->setHorizontal('left');
-    $sheet->getStyle('A2:B2')->getAlignment()->setHorizontal('left');
-    $sheet->setCellValue('A1',$header1);
-    $sheet->setCellValue('A2',$header2);
-    $sheet->getStyle('A:B')->getAlignment()->setHorizontal('center');
+    // $sheet->mergeCells('B1:C1');
+    // $sheet->mergeCells('B2:C2');
+    // $sheet->getStyle('B1:C1')->getAlignment()->setHorizontal('left');
+    // $sheet->getStyle('B2:C2')->getAlignment()->setHorizontal('left');
+    $sheet->setCellValue('C1',$header1);
+    $sheet->setCellValue('C2',$header2);
+    $sheet->getStyle('B:C')->getAlignment()->setHorizontal('center');
     $sheet->getStyle('D')->getAlignment()->setHorizontal('center');
     $sheet->getStyle('F:M')->getAlignment()->setHorizontal('center');
     $sheet->getStyle("A4:M4")->getFont()->setBold(true);
@@ -66,53 +81,74 @@
     $state_no=0;
     
     $date_report_array=array();
+    $row_array = array();
+    
     for($row=0;$row<count($_SESSION['cart_result']);$row++){
             $sheet->setCellValueByColumnAndRow(1,$row+5, $_SESSION['cart_result'][$row]['no']);
             $sheet->setCellValueByColumnAndRow(2,$row+5, $_SESSION['cart_result'][$row]['accession_no']);
-            
-            
+            $max=0;
             if($row==0){
+                $total_patient++;
                 $mf = $_SESSION['cart_result'][$row]['accession_no'];
                 $daterpt = $_SESSION['cart_result'][$row]['datereported'];
                 array_push($date_report_array,$daterpt);
-                
-                echo 'on ROW 0 : '.$mf.' '.var_dump($date_report_array).'<br/>';
-                
             }else{
                 if($_SESSION['cart_result'][$row]["accession_no"] != ' ' ){
+                    $total_patient++;
                     if($mf==$_SESSION['cart_result'][$row]['accession_no']){
                         array_push($date_report_array,$_SESSION['cart_result'][$row]['datereported']);
-                        
-                        echo $mf.' on ROW NOT 0 and accesion number SAME : '. var_dump($date_report_array).'<br/>';
+                        array_push($row_array,$row);
+                        array_push($date_report_array,$daterpt);
                     }
 
                     if($mf != $_SESSION['cart_result'][$row]['accession_no']){
                         $mf = $_SESSION['cart_result'][$row]['accession_no'];
                         $daterpt = $_SESSION['cart_result'][$row]['datereported'];
                         $date_report_array=array();
+                        $row_array=array();
+                        array_push($row_array,$row);
                         array_push($date_report_array,$daterpt);
-                        echo $mf.' on ROW NOT 0 and acession number NOT SAME : '.var_dump($date_report_array).'<br/>';
                     }
+                  
                 }
                 
                 if($_SESSION['cart_result'][$row]["accession_no"] == ' ' ){
                     array_push($date_report_array,$_SESSION['cart_result'][$row]['datereported']);
-                    echo $mf.' on ROW NOT 0 and accesion number EMPTY : '. var_dump($date_report_array).'<br/>';
+                    array_push($row_array,$row);
+                    $unix = array_map('strtotime', $date_report_array);
+                    $max = date('d M Y',max($unix));
+                   
                 }
             }
-
-
             
             $sheet->setCellValueByColumnAndRow(3,$row+5, $_SESSION['cart_result'][$row]['patient_name']);
             $sheet->setCellValueByColumnAndRow(4,$row+5, $_SESSION['cart_result'][$row]['testcode']);
             $sheet->setCellValueByColumnAndRow(5,$row+5, $_SESSION['cart_result'][$row]['testname']);
             $sheet->setCellValueByColumnAndRow(6,$row+5, $_SESSION['cart_result'][$row]['datereceived']);
             $sheet->setCellValueByColumnAndRow(7,$row+5, $_SESSION['cart_result'][$row]['timereceived']);
-            $sheet->setCellValueByColumnAndRow(8,$row+5, $_SESSION['cart_result'][$row]['datereported']);
+
+            if($max !=0){
+                $rowfirst=$row_array[0];
+                $row_last=$row_array[count($row_array)-1];
+                $rowfirstadd = $rowfirst+5;
+                $rowlastadd = $row_last+5;
+               
+                $date_merge_text = $max;
+                $sheet->mergeCells('H'.$rowfirstadd.':H'.$rowlastadd);
+                $sheet->getCell('H'.$rowfirstadd)
+                        ->setValue($max);
+                $sheet->getStyle('H'.$rowfirstadd)
+                        ->getAlignment()
+                        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            }
+
+            if($max==0){
+                $sheet->setCellValueByColumnAndRow(8,$row+5, $_SESSION['cart_result'][$row]['datereported']);
+            }
+            
             $sheet->setCellValueByColumnAndRow(9,$row+5, $_SESSION['cart_result'][$row]['timereported']);
             $sheet->setCellValueByColumnAndRow(10,$row+5, $_SESSION['cart_result'][$row]['datepredict']);
             $sheet->setCellValueByColumnAndRow(11,$row+5, $_SESSION['cart_result'][$row]['schedule']);
-            // $sheet->setCellValueByColumnAndRow(12,$row+5, $_SESSION['cart_result'][$row]['result']);
             $datereported = date('Y-m-d',strtotime($_SESSION['cart_result'][$row]['datereported']));
             $datepredict = date('Y-m-d',strtotime($_SESSION['cart_result'][$row]['datepredict']));
            

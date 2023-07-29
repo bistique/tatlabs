@@ -24,6 +24,28 @@ require_once './lib/header.php';
                 <p class="card-text text-white"><small>Process TAT</small></p>
             </div>
         </div>
+        
     </body>
+    <!-- <div  aria-live="polite" aria-atomic="true" style="position: relative; min-height: 200px;"> -->
+        <div id="toastmenu" class="toast" style="position: absolute; top: 0; right: 0;" data-autohide="false">
+            <div class="toast-header">
+                <img src="infologo.png" class="rounded mr-2" alt="..." width="32px">
+                <strong class="mr-auto">Information</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+         </div>
+            <div class="toast-body" id="toastmsgbody">
+                <small>
+                    <p><h4>Parameter Database</h4></p>
+                    <p> You can add new parameter to database by automatically importing from Ms.Excel</p>
+                    <br/>
+                    <p><h4> TAT Process</h4></p>
+                    <p> Process TAT by importing Excel File then calculate automatically</p>
+                    
+                </small>
+            </div>
+        </div>
+    <!-- </div> -->
     <script src="./assets/scripts/js/mimo.js"></script>
 </html>

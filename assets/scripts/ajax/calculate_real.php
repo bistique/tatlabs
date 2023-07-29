@@ -1,5 +1,5 @@
 <?php
-    /**
+    /*******************************************
      * Created by   : Ary Herijanto
      * Date         : 10th June 2023
      * Made For     : ABC Laboratorium Jakarta
@@ -7,7 +7,7 @@
      *                PHPMAILER  
      *                COMPOSER
      *
-     **/
+     *******************************************/
     session_start();
     error_reporting(E_ALL);
     ini_set('display_errors', TRUE);
@@ -20,6 +20,7 @@
     require_once '../../../vendor/autoload.php';
     require_once '../../../lib/config.php';
     require_once '../../../lib/header.php';
+    require_once 'holiday.php';
     $mimopredict='testmf';
     
     if(isset($_SESSION['cart_result'])){
@@ -164,7 +165,7 @@
         }
         return $daynumber_;
     }
-
+    
     if(isset($_SESSION['cart_item'])){
         $conn2 = mysqli_connect('localhost','bistique','mimo@@##','tatlab');
         if (!isset($_SESSION['cart_result'])) {

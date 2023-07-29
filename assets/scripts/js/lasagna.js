@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $('#toastlogin').toast('show');
     $('#submit').click(function(e){
         var usr_=$('#username').val();
         var pwd_=$('#pwd').val();

@@ -6,6 +6,7 @@
     require_once './lib/config.php';
     require_once './lib/header.php';
 ?>
+
 <!DOCTYPE html>
 <html>
     <body>
@@ -75,6 +76,24 @@
 	    </div>
                 
     </body>
+    <div id="toasttat" class="toast" style="position: absolute; top: 0; right: 0;" data-autohide="false">
+                <img src="infologo.png" class="rounded mr-2" alt="..." width="32px">
+                <strong class="mr-auto">Information</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+         </div>
+            <div class="toast-body" id="toastmsgbody">
+                <small>
+                <p><h4>Choose File</h4></p>
+                <p> Click button 'Choose File' then select Excel file located in your folder</p>
+                    <br/>
+                    <p><h4> Process </h4></p>
+                    <p> Click button 'Process' to import file excel to the screen</p>
+                    
+                </small>
+            </div>
+        </div>
     <script src="./assets/scripts/js/mimo.js"></script>
 </html>
 

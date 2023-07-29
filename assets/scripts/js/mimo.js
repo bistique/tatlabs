@@ -2,6 +2,12 @@ let filename;
 $(document).ready(function () {
     $('#btncalculate').hide();
     $('#btnexport').hide();
+    
+    $('#toasttat').toast('show');
+   
+   
+   
+   
     $filename='';
     $('#param').click(function (e) { 
         console.log('param');
@@ -119,24 +125,48 @@ $(document).ready(function () {
             url: "./assets/scripts/ajax/export.php",
             data:"header1="+header1+"&header2="+header2+"&filename="+filename1,
             success: function(lasagna){
-                console.log(lasagna);
-                if(lasagna=='true'){
-                    swal({
-                        title: "File Exported Succesfully",
-                        text: "File is ready",
-                        timer: 3000,
-                        type: "success",
-                        showConfirmButton: false
-                    });
-                }else{
-                    swal({
-                        title: "Choose File First",
-                        text: "Please choose file",
-                        timer: 3000,
-                        type: "error",
-                        showConfirmButton: false
-                    });
-                }
+                // console.log(lasagna);
+                // if(lasagna=='true'){
+                //     swal({
+                //         title: "File Exported Succesfully",
+                //         text: "File is ready",
+                //         timer: 3000,
+                //         type: "success",
+                //         showConfirmButton: false
+                //     });
+                // }else{
+                //     swal({
+                //         title: "Choose File First",
+                //         text: "Please choose file",
+                //         timer: 3000,
+                //         type: "error",
+                //         showConfirmButton: false
+                //     });
+                // }
+                $.ajax({
+                    type:"POST",
+                    url:"./assets/scripts/ajax/checkfile.php",
+                    data:"filename="+filename1,
+                    success: function(responsefile){
+                        if(responsefile=='exist'){
+                            swal({
+                                title: "File Exported Succesfully",
+                                text: "File is ready",
+                                timer: 3000,
+                                type: "success",
+                                showConfirmButton: false
+                            });
+                        }else{
+                            swal({
+                                title: "File Did Not Exported",
+                                text: "File Error",
+                                timer: 3000,
+                                type: "danger",
+                                showConfirmButton: false
+                            });
+                        }
+                    } 
+                })
                 
             }
         })
