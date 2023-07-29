@@ -1,8 +1,8 @@
 <?php
 //
   function find_holiday($mydaymonth){
-    $daymonth = '29 Jun 2023';
-    $month = date('m',strtotime($daymonth));
+    
+    $month = date('m',strtotime($mydaymonth));
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -20,8 +20,8 @@
     curl_close($curl);
     $holiday = json_decode($response);
 
-    $date_find = date('Y-m-d',strtotime($daymonth));
-    echo $date_find;
+    $date_find = date('Y-m-d',strtotime($mydaymonth));
+    //echo $date_find;
     if (in_array($date_find,array_column($holiday,'holiday_date'))){
       return 'holiday';
     }else{

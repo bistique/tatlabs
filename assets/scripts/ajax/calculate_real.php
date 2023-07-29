@@ -308,7 +308,15 @@
                     }
                 }
             }
-            $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$sp,'schedule'=>$dayme_mimo,'result'=>$result_);
+            $isHoliday = find_holiday($sp);
+            switch ($isHoliday) {
+                case 'holiday':
+                    # code...
+                    break;
+                case 'workday';
+                $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$sp,'schedule'=>$dayme_mimo,'result'=>$result_,'libur'=>$isHoliday);
+                    break;
+            }
             array_push($_SESSION['cart_result'],$itemArrayResult);
          }
     }else{
@@ -328,6 +336,7 @@
                 <th class="text-center"><small>DATE TAT</small></th>
                 <th class="text-center"><small>SCHEDULE</small></th>
                 <th class="text-center"><small>RESULT</small></th>
+                <th class="text-center"><small>HOLIDAY</small></th>
 
             </thead>';
     foreach($_SESSION['cart_result'] as $result){
@@ -344,6 +353,7 @@
                 <td class="text-center bg-primary text-white"><small>'.$result['datepredict'].'</small></td>
                 <td class="text-center bg-info text-white"><small>'.$result['schedule'].'</small></td>
                 <td class="text-center bg-secondary text-white"><small>'.$result['result'].'</small></td>
+                <td class="text-center bg-secondary text-white"><small>'.$result['libur'].'</small></td>
             </tr>';
 
     }
