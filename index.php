@@ -29,7 +29,7 @@
                 </a>
             </form>
         </div>
-        <div role="alert" id="toastlogin" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
+        <!-- <div role="alert" id="toastlogin" aria-live="assertive" aria-atomic="true" class="toast" data-autohide="false">
             <div class="toast-header">
                 <img src="logo.png" class="rounded mr-2" alt="...">
                 <strong class="mr-auto">ABC Login</strong>
@@ -41,7 +41,7 @@
             <div class="toast-body">
                 Hello, world! This is a toast message.
             </div>
-        </div>
+        </div> -->
     </body>
     <script src="./assets/scripts/js/lasagna.js"></script>
 </html>

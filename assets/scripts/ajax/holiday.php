@@ -19,9 +19,9 @@
     $response = curl_exec($curl);
     curl_close($curl);
     $holiday = json_decode($response);
-
+    
     $date_find = date('Y-m-d',strtotime($mydaymonth));
-    //echo $date_find;
+   
     if (in_array($date_find,array_column($holiday,'holiday_date'))){
       return 'holiday';
     }else{

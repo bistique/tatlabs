@@ -300,21 +300,31 @@
                         }
                     }else{
                         if(in_array($listday[$counter],array_column($dayarray,'day'))){
-                            $day_found = $listday[$newcounter];
+                            $day_found = $listday[$counter];
+                            // echo $day_found.'----'.$_testcode.'---'.$dayreceive.'<br/>';
+                            // var_dump($dayarray);
                             $dx = findStepDay($dayreceive,$dayarray,$day_found,$listday);
-                            $sp = updateDate($dreceive,$dx);
+                            $sp = updateDate($dreceive,$dx);   
                             break;
                         }
                     }
                 }
             }
+            if($workday_>0){
+                $sp = date('d M Y', strtotime("+".$workday_." day", strtotime($sp)));
+            }
             $isHoliday = find_holiday($sp);
             switch ($isHoliday) {
                 case 'holiday':
                     # code...
+                    $dreceivesp = date('m/d/Y',strtotime($sp));
+                    $dayreceivesp = date('D',strtotime($sp));
+                    $day_receive_number = _numberOfDay($dayreceivesp);
+                    $sp1 = find_day($_no,$code_,$dayarray,$dayreceivesp,$day_receive_number,$max_index,$listday,$dreceivesp,$_timereceived);
+                    $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$sp1,'schedule'=>$dayme_mimo,'result'=>$result_,'libur'=>$isHoliday);
                     break;
                 case 'workday';
-                $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$sp,'schedule'=>$dayme_mimo,'result'=>$result_,'libur'=>$isHoliday);
+                    $itemArrayResult = array('no'=>$_no,'accession_no'=>$_accessionno,'patient_name'=>$_patientname,'testcode'=>$_testcode,'testname'=>$_testname,'datereceived'=>$_datereceived,'timereceived'=>$_timereceived,'datereported'=>$_datereported,'timereported'=>$_timereported,'datepredict'=>$sp,'schedule'=>$dayme_mimo,'result'=>$result_,'libur'=>$isHoliday);
                     break;
             }
             array_push($_SESSION['cart_result'],$itemArrayResult);
