@@ -310,7 +310,7 @@
                     }
                 }
             }
-            if($workday_>0){
+            if($workday_ > 0){
                 $sp = date('d M Y', strtotime("+".$workday_." day", strtotime($sp)));
             }
             $isHoliday = find_holiday($sp);

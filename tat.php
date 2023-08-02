@@ -82,7 +82,7 @@
                 <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-         </div>
+         
             <div class="toast-body" id="toastmsgbody">
                 <small>
                 <p><h4>Choose File</h4></p>
@@ -93,7 +93,7 @@
                     
                 </small>
             </div>
-        </div>
+    </div>
     <script src="./assets/scripts/js/mimo.js"></script>
 </html>
 

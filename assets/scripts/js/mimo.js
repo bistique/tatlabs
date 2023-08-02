@@ -1,5 +1,6 @@
 let filename;
 $(document).ready(function () {
+    //location.reload(true);
     $('#btncalculate').hide();
     $('#btnexport').hide();
     
@@ -10,11 +11,11 @@ $(document).ready(function () {
    
     $filename='';
     $('#param').click(function (e) { 
-        console.log('param');
+        
         window.open('./assets/scripts/ajax/import_item.php','_self');    
     });
     $('#tat').click(function (e) { 
-        console.log('param');
+        
         window.open('tat.php','_self');
            
     });
@@ -23,6 +24,10 @@ $(document).ready(function () {
          console.log(filename);
          $('#txtfile').val(filename);
          
+    });
+
+    $('#holiday').click(function (e) { 
+        window.open('holiday.php','_self'); 
     });
 
     $('#uploadbtn').click(function(e){
@@ -76,33 +81,8 @@ $(document).ready(function () {
     $('#btnexport').click(function(e){
         $("#fileModal").modal("show", { backdrop: "static" });
         $('#h1-1').html('Export To Excel .XLSX');
-        // $.ajax({
-        //     type: "POST",
-        //     url: "./assets/scripts/ajax/export.php",
-        //     data:'',
-        //     success: function(lasagna){
-        //         console.log(lasagna);
-        //         if(lasagna=='ok'){
-        //             swal({
-        //                 title: "File Exported Succesfully",
-        //                 text: "File is ready",
-        //                 timer: 3000,
-        //                 type: "success",
-        //                 showConfirmButton: false
-        //             });
-        //         }else{
-        //             swal({
-        //                 title: "Choose File First",
-        //                 text: "Please choose file",
-        //                 timer: 3000,
-        //                 type: "error",
-        //                 showConfirmButton: false
-        //             });
-        //         }
-                
-        //     }
-        // })
     });
+
     $('#btnexportexcel').click(function(e){
         //$("#fileModal").modal("show", { backdrop: "static" });
         var header1 = $('#txtheader1').val();
@@ -125,24 +105,6 @@ $(document).ready(function () {
             url: "./assets/scripts/ajax/export.php",
             data:"header1="+header1+"&header2="+header2+"&filename="+filename1,
             success: function(lasagna){
-                // console.log(lasagna);
-                // if(lasagna=='true'){
-                //     swal({
-                //         title: "File Exported Succesfully",
-                //         text: "File is ready",
-                //         timer: 3000,
-                //         type: "success",
-                //         showConfirmButton: false
-                //     });
-                // }else{
-                //     swal({
-                //         title: "Choose File First",
-                //         text: "Please choose file",
-                //         timer: 3000,
-                //         type: "error",
-                //         showConfirmButton: false
-                //     });
-                // }
                 $.ajax({
                     type:"POST",
                     url:"./assets/scripts/ajax/checkfile.php",
@@ -172,15 +134,18 @@ $(document).ready(function () {
         })
         $("#fileModal").modal("hide");
     });
+
+    $("#findholiday").click(function (e) { 
+        selectedmonth = $('#_month').val();
+        $.ajax({
+            type: "POST",
+            url: "./assets/scripts/ajax/holiday_api.php",
+            data:"mymonth="+selectedmonth,
+            success: function(lasagna){
+                console.log(lasagna);
+                    $('#resultholiday').html(' ');
+                    $("#resultholiday").html(lasagna);
+            }
+        })
+     })
 });
-//var foto = $('#filefoto').prop("files")[0];
-// var fd = new FormData();
-// fd.append('ft',foto);
-// // type : "POST",
-// url: path+"saveproduct",
-// data: fd,
-// contentType: false,
-// cache: false,
-// processData: false,
-// success: function(response){
-// }
