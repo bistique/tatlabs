@@ -9,6 +9,20 @@
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
+    function convert_time_to_text($mytime){
+        if($mytime == '0' || $mytime == 0 ){
+            return '0';
+        }
+
+        if(substr($mytime,0,1) == '<'){
+            return $mytime;
+        }
+
+        if($mytime != 0 && substr($mytime,0,1)!='<'){
+            return date('h:i',$mytime);
+        }
+    }
+
     $results = [];
     $reader = new Xlsx(); //   PhpOffice\PhpSpreadsheet\Reader\Xlsx
     $reader->setReadDataOnly(true);
@@ -28,10 +42,11 @@
         for ($col = 2; $col < $ColumnIndex; ++ $col) {
             $cell = $sheet->getCellByColumnAndRow($col, $row);
             if($cell->getValue()==''){
-                $value=0;
+                $value = 0;
             }else{
-                $value=$cell->getValue();
+                $value = $cell->getValue();
             }
+            
             switch($col){
                 case 2:
                     $code = $value;
@@ -41,6 +56,7 @@
                     break;
                 case 4:
                     $mon = $value;
+                    
                     break;
                 case 5:
                     $tue = $value;

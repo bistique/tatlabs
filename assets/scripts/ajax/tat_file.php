@@ -51,27 +51,18 @@
     }
 	
     $ColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($maxcol);
-    for ($row = 5; $row <= $maxrow-7; ++ $row) {
+    for ($row = 5; $row <= $maxrow; ++ $row) {
         $val = array();
        
         for ($col = 1; $col < $ColumnIndex; ++ $col) {
             $cell = $sheet->getCellByColumnAndRow($col, $row);
+           
             if($cell->getValue()==''){
                 $value=' ';
             }else{
                 $value=$cell->getValue();
             }
-
-            // if($cell=='TOTAL PASIEN :'){
-            //     break;
-            // }
-            // if($cell=='WSHP melebihi TAT :'){
-            //     break;
-            // }
-            // if($cell=='% PENCAPAIAN TAT'){
-            //     break;
-            // }
-
+            
             switch($col){
                 case 1:
                     $no = $value;
@@ -101,9 +92,14 @@
                     $datereported = date('d M Y', $datereported);
                     break;
                 case 9:
-                    $timereported = strtotime($value);
+                    
+                     $timereported = strtotime($value);
                     $timereported = date('H:i',$timereported);
-                    break;
+                     break;
+                case 10:
+                        $status = $value;
+                   //     $timereported = date('H:i',$timereported);
+                        break;
             }
             
             // $val[] = $cell->getValue();
@@ -133,14 +129,14 @@
         $import.='<tr>
                 <td class="text-center"><medium>'.$item['no'].'</medium></td>
                 <td class="text-center"><medium>'.$item['accession_no'].'</medium></td>
-                <td class="text-left"><medium>'.$item['patient_name'].'</medium></td>
-                <td class="text-center"><medium>'.$item['testcode'].'</medium></td>
-                <td class="text-left"><medium>'.$item['testname'].'</medium></td>
-                <td class="text-center"><medium>'.$item['datereceived'].'</medium></td>
-                <td class="text-center"><medium>'.$item['timereceived'].'</medium></td>
-                <td class="text-center"><medium>'.$item['datereported'].'</medium></td>
-                <td class="text-center"><medium>'.$item['timereported'].'</medium></td>
-            </tr>';
+                 <td class="text-left"><medium>'.$item['patient_name'].'</medium></td>
+                 <td class="text-center"><medium>'.$item['testcode'].'</medium></td>
+                 <td class="text-left"><medium>'.$item['testname'].'</medium></td>
+                 <td class="text-center"><medium>'.$item['datereceived'].'</medium></td>
+                 <td class="text-center"><medium>'.$item['timereceived'].'</medium></td>
+                 <td class="text-center"><medium>'.$item['datereported'].'</medium></td>
+                 <td class="text-center"><medium>'.$item['timereported'].'</medium></td>
+             </tr>';
             // $code_ = $item['code'];
             // $param_ = $item['param'];
             // $mon_ = $item['mon'];

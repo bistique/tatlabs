@@ -1,4 +1,5 @@
 let filename;
+
 $(document).ready(function () {
     //location.reload(true);
     $('#btncalculate').hide();
@@ -65,15 +66,20 @@ $(document).ready(function () {
     })
 
     $('#btncalculate').click(function(e){
+       $.blockUI();
         $.ajax({
-            type: "POST",
+            type: "POST", 
             url: "./assets/scripts/ajax/calculate_real.php",
             data:'',
+            
             success: function(mimoresponse){
                 $('#importresult').html('');
                 $('#btncalculate').hide();
                 $('#importresult').html(mimoresponse);
                 $('#btnexport').show();
+            },
+            complete : function (){
+                $.unblockUI();
             }
         })
     });
