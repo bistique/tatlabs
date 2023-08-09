@@ -127,7 +127,7 @@
             $sheet->setCellValueByColumnAndRow(5,$row+5, $_SESSION['cart_result'][$row]['testname']);
             $sheet->setCellValueByColumnAndRow(6,$row+5, $_SESSION['cart_result'][$row]['datereceived']);
             $sheet->setCellValueByColumnAndRow(7,$row+5, $_SESSION['cart_result'][$row]['timereceived']);
-
+            
             if($max != 0){
                 $rowfirst=$row_array[0];
                 $row_last=$row_array[count($row_array)-1];
@@ -176,7 +176,6 @@
             }
             $sheet->setCellValueByColumnAndRow(12,$row+5, $_SESSION['cart_result'][$row]['result']);
             $sheet->setCellValueByColumnAndRow(13,$row+5, $datevalid);
-            
     }
     $maxrow = $sheet->getHighestRow();
     $sheet->setCellValue("A".$maxrow+1, "TOTAL PATIENT :");
