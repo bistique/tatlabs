@@ -175,7 +175,20 @@
                 $state_no++;
             }
             $sheet->setCellValueByColumnAndRow(12,$row+5, $_SESSION['cart_result'][$row]['result']);
-            $sheet->setCellValueByColumnAndRow(13,$row+5, $datevalid);
+
+            if($max==0){
+                $sheet->setCellValueByColumnAndRow(13,$row+5, $datevalid);
+            }
+            
+            if($max!=0){
+                $sheet->mergeCells('M'.$rowfirstadd.':M'.$rowlastadd);
+                $sheet->getCell('M'.$rowfirstadd)
+                        ->setValue('Yes');
+                $sheet->getStyle('M'.$rowfirstadd)
+                        ->getAlignment()
+                        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            }
+            
     }
     $maxrow = $sheet->getHighestRow();
     $sheet->setCellValue("A".$maxrow+1, "TOTAL PATIENT :");

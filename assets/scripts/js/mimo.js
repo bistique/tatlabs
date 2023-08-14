@@ -3,12 +3,9 @@ let filename;
 $(document).ready(function () {
     //location.reload(true);
     $('#btncalculate').hide();
-    $('#btnexport').hide();
-    
+    $('#btnexportexcel').hide();
+    $('#btnexportgroup').hide();
     $('#toasttat').toast('show');
-   
-   
-   
    
     $filename='';
     $('#param').click(function (e) { 
@@ -76,7 +73,8 @@ $(document).ready(function () {
                 $('#importresult').html('');
                 $('#btncalculate').hide();
                 $('#importresult').html(mimoresponse);
-                $('#btnexport').show();
+                $('#btnexportexcel').show();
+                $('#btnexportgroup').show();
             },
             complete : function (){
                 $.unblockUI();
@@ -84,16 +82,34 @@ $(document).ready(function () {
         })
     });
     
-    $('#btnexport').click(function(e){
+    $('#btnexportexcel').click(function(e){
         $("#fileModal").modal("show", { backdrop: "static" });
         $('#h1-1').html('Export To Excel .XLSX');
     });
 
-    $('#btnexportexcel').click(function(e){
+    $('#btnexportgroup').click(function(e){
+        $("#fileModal").modal("show", { backdrop: "static" });
+        $('#h1-1').html('Export To Excel By Grouping .XLSX');
+    });
+
+    $('#btnexportexcelmodal').click(function(e){
         //$("#fileModal").modal("show", { backdrop: "static" });
         var header1 = $('#txtheader1').val();
         var header2 = $('#txtheader2').val();
         var filename1 = $('#txtfilename').val();
+        var title = $('#h1-1').html();
+        console.log(title);
+        var filemf = 'file';
+        switch (title) {
+            case 'Export To Excel .XLSX':
+                filemf = 'export.php';
+                break;
+            case 'Export To Excel By Grouping .XLSX':
+                filemf = 'export_group.php';
+                break;
+            default:
+                break;
+        }
         if(header1==''){
             header1 = 'TAT REPORTS';
         }
@@ -108,7 +124,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: "./assets/scripts/ajax/export.php",
+            url: "./assets/scripts/ajax/"+filemf,
             data:"header1="+header1+"&header2="+header2+"&filename="+filename1,
             success: function(lasagna){
                 $.ajax({

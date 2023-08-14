@@ -29,7 +29,8 @@
         </div>
         <div class="mt-4 mr-3 text-right">
             <button class="btn btn-primary" id="btncalculate">Calculate</button>
-            <button class="btn btn-warning" id="btnexport">Export To Excel</button>
+            <button class="btn btn-warning" id="btnexportgroup">Export Excel By Grouping</button>
+            <button class="btn btn-danger" id="btnexportexcel">Export Excel Internal</button>
         </div>
 
         <div class="mt-4" id="importresult"></div>
@@ -68,7 +69,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" id="btnexportexcel" class="btn btn-success" data-dismiss="modal">Export</button>
+                        <button type="button" id="btnexportexcelmodal" class="btn btn-success" data-dismiss="modal">Export</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                     </div>
                 </div><!-- /.modal-content -->
