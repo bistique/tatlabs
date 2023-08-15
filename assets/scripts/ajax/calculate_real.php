@@ -23,6 +23,8 @@
     require_once 'holiday.php';
     $mimopredict='testmf';
     
+
+    // Hex Decoder --> ÿÿÏæZ
     if(isset($_SESSION['cart_result'])){
         unset($_SESSION['cart_result']);
     }
@@ -188,10 +190,17 @@
             $result = mysqli_query($conn2,"SELECT * from _param WHERE code='$_testcode'");
             $fetchdata = mysqli_fetch_array($result);
             
+            
             //Get data time from database  per code test
             if($fetchdata){
                 $code_ = $fetchdata['code'];
 
+                //------------Block Code Update
+                if(substr($fetchdata['result'],0,1) != 'jam'){
+
+                }
+                //---------------------------
+                
                 $mon_ = $fetchdata['mon'];
                 $daymon = array();
                 $numberofday=0;

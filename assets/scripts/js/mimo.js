@@ -98,7 +98,7 @@ $(document).ready(function () {
         var header2 = $('#txtheader2').val();
         var filename1 = $('#txtfilename').val();
         var title = $('#h1-1').html();
-        console.log(title);
+        
         var filemf = 'file';
         switch (title) {
             case 'Export To Excel .XLSX':
